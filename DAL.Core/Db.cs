@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DAL.Core;
 
-public abstract class AppContext : IdentityDbContext<AppUser, AppRole, Guid>
+public abstract class Db : IdentityDbContext<AppUser, AppRole, Guid>
 {
     
 }

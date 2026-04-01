@@ -7,12 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.5" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.5" />
+      <ProjectReference Include="..\BL.Core\BL.Core.csproj" />
+      <ProjectReference Include="..\BL.Gpx\BL.Gpx.csproj" />
+      <ProjectReference Include="..\DAL.Core\DAL.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DAL.Core\DAL.Core.csproj" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     </ItemGroup>
 
 </Project>

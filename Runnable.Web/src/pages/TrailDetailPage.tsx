@@ -33,6 +33,8 @@ import LinkIcon from "@mui/icons-material/Link";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from "react-leaflet";
@@ -70,6 +72,8 @@ export default function TrailDetailPage() {
   const trail = mockTrails.find((t) => t.id === Number(id));
 
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isDisliked, setIsDisliked] = useState(false);
+  const [dislikeCount, setDislikeCount] = useState(0);
   const [reviewRating, setReviewRating] = useState<number | null>(null);
   const [reviewComment, setReviewComment] = useState("");
   const [reviews, setReviews] = useState<TrailReview[]>(trail?.reviews ?? []);
@@ -102,6 +106,13 @@ export default function TrailDetailPage() {
     .slice(0, 3);
 
   const photoMarkers = trail.photos.filter((p) => p.lat && p.lng);
+
+  const handleToggleDislike = () => {
+    setIsDisliked((prev) => {
+      setDislikeCount((c) => prev ? c - 1 : c + 1);
+      return !prev;
+    });
+  };
 
   const handleSubmitReview = () => {
     if (!reviewRating) return;
@@ -364,14 +375,25 @@ export default function TrailDetailPage() {
                   onChange={(e) => setReviewComment(e.target.value)}
                   sx={{ mb: 2 }}
                 />
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={handleSubmitReview}
-                  disabled={!reviewRating}
-                >
-                  Submit
-                </Button>
+                <Stack direction="row" spacing={2}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={handleSubmitReview}
+                    disabled={!reviewRating}
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    color={isDisliked ? "error" : "inherit"}
+                    startIcon={isDisliked ? <ThumbDownIcon /> : <ThumbDownOffAltIcon />}
+                    onClick={handleToggleDislike}
+                  >
+                    {isDisliked ? "Disliked" : "Report issue"}{dislikeCount > 0 ? ` (${dislikeCount})` : ""}
+                  </Button>
+                </Stack>
               </CardContent>
             </Card>
 
