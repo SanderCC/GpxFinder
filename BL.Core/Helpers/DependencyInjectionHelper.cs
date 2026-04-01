@@ -19,12 +19,7 @@ public static class DependencyInjectionHelper
             {
                 Type = t,
                 Attributes = t.GetCustomAttributes(true)
-                    .Where(a => a
-                        is ScopedAttribute 
-                        or ServiceAttribute
-                        or HandlerAttribute 
-                        or HelperAttribute
-                        or CredentialsAttribute)
+                    .Where(a => a is ScopedAttribute)
                     .ToList()
             })
             .Where(x => x.Attributes.Count != 0);

@@ -4,13 +4,13 @@ namespace BL.Core.Attributes;
 public class ScopedAttribute : Attribute { }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class ServiceAttribute : Attribute { }
+public class ServiceAttribute : ScopedAttribute { }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class HandlerAttribute : Attribute { }
+public class HandlerAttribute : ScopedAttribute { }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class HelperAttribute : Attribute { }
+public class HelperAttribute : ScopedAttribute { }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class CredentialsAttribute : Attribute { }
+public class CredentialsAttribute : ScopedAttribute { }

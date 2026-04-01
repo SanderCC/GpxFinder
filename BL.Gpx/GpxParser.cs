@@ -1,16 +1,14 @@
-using System.Xml.Linq;
+using System.Xml;
 using BL.Core.Attributes;
 using BL.Gpx.Models;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
 
 namespace BL.Gpx;
 
-[Scoped]
 [Service]
 public class GpxParser : IGpxParser
 {
-    private static readonly XNamespace GpxNs = "http://www.topografix.com/GPX/1/1";
-    private static readonly XNamespace GpxNsLegacy = "http://www.topografix.com/GPX/1/0";
     private static readonly GeometryFactory GeometryFactory = new(new PrecisionModel(), 4326);
 
     public GpxParseResult Parse(string gpxFilePath)
@@ -21,49 +19,44 @@ public class GpxParser : IGpxParser
 
     public GpxParseResult Parse(Stream gpxStream)
     {
-        var doc = XDocument.Load(gpxStream);
-        var root = doc.Root ?? throw new InvalidOperationException("Invalid GPX: missing root element.");
+        using var xmlReader = XmlReader.Create(gpxStream);
+        var gpxFile = GpxFile.ReadFrom(xmlReader, new GpxReaderSettings
+        {
+            DefaultCreatorIfMissing = "GpxFinder",
+            IgnoreBadDateTime = true,
+            IgnoreUnexpectedChildrenOfTopLevelElement = true,
+            IgnoreVersionAttribute = true,
+        });
 
-        var ns = DetectNamespace(root);
-
-        var name = root.Element(ns + "metadata")?.Element(ns + "name")?.Value
-                   ?? root.Element(ns + "trk")?.Element(ns + "name")?.Value
+        var name = gpxFile.Metadata.Name
+                   ?? gpxFile.Tracks.FirstOrDefault()?.Name
                    ?? "Unnamed Trail";
 
-        var description = root.Element(ns + "metadata")?.Element(ns + "desc")?.Value
-                          ?? root.Element(ns + "trk")?.Element(ns + "desc")?.Value;
+        var description = gpxFile.Metadata.Description
+                          ?? gpxFile.Tracks.FirstOrDefault()?.Description;
 
-        var trackPoints = ExtractTrackPoints(root, ns);
-
-        if (trackPoints.Count < 2)
-        {
-            trackPoints = ExtractRoutePoints(root, ns);
-        }
+        var trackPoints = ExtractTrackPoints(gpxFile);
 
         if (trackPoints.Count < 2)
-        {
             throw new InvalidOperationException("GPX file must contain at least 2 track or route points.");
-        }
 
         var coordinates = trackPoints
             .Select(p => new CoordinateZ(p.Longitude, p.Latitude, p.Elevation ?? double.NaN))
             .ToArray();
 
         var route = GeometryFactory.CreateLineString(coordinates);
-
         var distanceKm = CalculateDistanceKm(trackPoints);
         var elevationGain = CalculateElevationGain(trackPoints);
         var durationMinutes = EstimateDuration(distanceKm, elevationGain);
-
         var center = route.Centroid;
 
-        var waypoints = root.Elements(ns + "wpt")
-            .Select(wpt => new GpxWaypoint
+        var waypoints = gpxFile.Waypoints
+            .Select(w => new ParsedWaypoint
             {
-                Name = wpt.Element(ns + "name")?.Value ?? "Waypoint",
-                Latitude = (double)wpt.Attribute("lat")!,
-                Longitude = (double)wpt.Attribute("lon")!,
-                Elevation = ParseOptionalDouble(wpt.Element(ns + "ele")?.Value),
+                Name = w.Name ?? "Waypoint",
+                Latitude = (double)w.Latitude,
+                Longitude = (double)w.Longitude,
+                Elevation = w.ElevationInMeters.HasValue ? (double)w.ElevationInMeters : null,
             })
             .ToList();
 
@@ -81,44 +74,28 @@ public class GpxParser : IGpxParser
         };
     }
 
-    private static XNamespace DetectNamespace(XElement root)
+    private static List<TrackPoint> ExtractTrackPoints(GpxFile gpxFile)
     {
-        var ns = root.GetDefaultNamespace();
-        if (ns == GpxNs || ns == GpxNsLegacy)
-            return ns;
+        var points = gpxFile.Tracks
+            .SelectMany(t => t.Segments)
+            .SelectMany(s => s.Waypoints)
+            .Select(ToTrackPoint)
+            .ToList();
 
-        if (root.Elements(GpxNs + "trk").Any() || root.Elements(GpxNs + "rte").Any())
-            return GpxNs;
+        if (points.Count >= 2) return points;
 
-        if (root.Elements(GpxNsLegacy + "trk").Any() || root.Elements(GpxNsLegacy + "rte").Any())
-            return GpxNsLegacy;
-
-        return GpxNs;
-    }
-
-    private static List<TrackPoint> ExtractTrackPoints(XElement root, XNamespace ns)
-    {
-        return root.Descendants(ns + "trkpt")
-            .Select(ParseTrackPoint)
+        return gpxFile.Routes
+            .SelectMany(r => r.Waypoints)
+            .Select(ToTrackPoint)
             .ToList();
     }
 
-    private static List<TrackPoint> ExtractRoutePoints(XElement root, XNamespace ns)
+    private static TrackPoint ToTrackPoint(GpxWaypoint w) => new()
     {
-        return root.Descendants(ns + "rtept")
-            .Select(ParseTrackPoint)
-            .ToList();
-    }
-
-    private static TrackPoint ParseTrackPoint(XElement element)
-    {
-        return new TrackPoint
-        {
-            Latitude = (double)element.Attribute("lat")!,
-            Longitude = (double)element.Attribute("lon")!,
-            Elevation = ParseOptionalDouble(element.Element(element.Name.Namespace + "ele")?.Value),
-        };
-    }
+        Latitude = (double)w.Latitude,
+        Longitude = (double)w.Longitude,
+        Elevation = w.ElevationInMeters.HasValue ? (double)w.ElevationInMeters : null,
+    };
 
     private static decimal CalculateDistanceKm(List<TrackPoint> points)
     {
@@ -149,7 +126,6 @@ public class GpxParser : IGpxParser
 
     private static int EstimateDuration(decimal distanceKm, decimal elevationGain)
     {
-        // Naismith's rule: ~5 km/h base + 1 min per 10m elevation gain
         var baseMinutes = (double)distanceKm / 5.0 * 60.0;
         var elevationMinutes = (double)elevationGain / 10.0;
         return (int)Math.Ceiling(baseMinutes + elevationMinutes);
@@ -175,12 +151,6 @@ public class GpxParser : IGpxParser
     }
 
     private static double ToRadians(double degrees) => degrees * Math.PI / 180.0;
-
-    private static double? ParseOptionalDouble(string? value) =>
-        double.TryParse(value, System.Globalization.NumberStyles.Float,
-            System.Globalization.CultureInfo.InvariantCulture, out var result)
-            ? result
-            : null;
 
     private sealed class TrackPoint
     {

@@ -5,6 +5,10 @@
     <ProjectReference Include="..\BL.Core\BL.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NetTopologySuite.IO.GPX" Version="1.1.1" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

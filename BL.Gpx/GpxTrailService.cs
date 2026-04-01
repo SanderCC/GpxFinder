@@ -4,7 +4,6 @@ using Domain.App.Enums;
 
 namespace BL.Gpx;
 
-[Scoped]
 [Service]
 public class GpxTrailService(IGpxParser gpxParser) : IGpxTrailService
 {

@@ -12,10 +12,10 @@ public class GpxParseResult
     public decimal DistanceKm { get; set; }
     public decimal ElevationGainMeters { get; set; }
     public int EstimatedDurationMinutes { get; set; }
-    public List<GpxWaypoint> Waypoints { get; set; } = [];
+    public List<ParsedWaypoint> Waypoints { get; set; } = [];
 }
 
-public class GpxWaypoint
+public class ParsedWaypoint
 {
     public required string Name { get; set; }
     public double Latitude { get; set; }
