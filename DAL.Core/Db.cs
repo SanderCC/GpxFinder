@@ -13,4 +13,11 @@ public abstract class Db : IdentityDbContext<AppUser, AppRole, Guid>
     public DbSet<UserFavorite> UserFavorites => Set<UserFavorite>();
     public DbSet<UserTrailList> UserTrailLists => Set<UserTrailList>();
     public DbSet<UserTrailListItem> UserTrailListItems => Set<UserTrailListItem>();
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.ApplyConfigurationsFromAssembly(typeof(Db).Assembly);
+    }
 }
