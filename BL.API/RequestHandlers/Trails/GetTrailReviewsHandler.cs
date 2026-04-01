@@ -13,7 +13,7 @@ public sealed class GetTrailReviewsHandler(Db db)
             .Where(r => r.TrailId == trailId && !r.IsReport)
             .OrderByDescending(r => r.CreatedAt)
             .Select(r => new ReviewDto(
-                r.Id, r.User!.FirstName + " " + r.User.LastName[..1] + ".",
+                r.Id, r.User!.FirstName + " " + r.User.LastName.Substring(0, 1) + ".",
                 r.Rating, r.Comment))
             .ToListAsync();
     }
