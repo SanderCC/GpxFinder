@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace BL.API.RequestHandlers.Favorites;
 
 [Handler]
-public sealed class GetFavoritesHandler(Db db, IUserSessionService userSession)
+public sealed class GetFavoritesHandler(
+    Db db,
+    IUserSessionService userSession)
 {
     public async Task<List<FavoriteTrailDto>> HandleAsync()
     {
@@ -24,6 +26,11 @@ public sealed class GetFavoritesHandler(Db db, IUserSessionService userSession)
     }
 
     public sealed record FavoriteTrailDto(
-        Guid Id, string Name, TrailType TrailType, DifficultyLevel Difficulty,
-        decimal DistanceKm, decimal ElevationGainMeters, DateTimeOffset FavoritedAt);
+        Guid Id,
+        string Name,
+        TrailType TrailType,
+        DifficultyLevel Difficulty,
+        decimal DistanceKm,
+        decimal ElevationGainMeters,
+        DateTimeOffset FavoritedAt);
 }

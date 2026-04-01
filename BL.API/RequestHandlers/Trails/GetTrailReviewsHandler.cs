@@ -18,5 +18,9 @@ public sealed class GetTrailReviewsHandler(Db db)
             .ToListAsync();
     }
 
-    public sealed record ReviewDto(Guid Id, string User, int Rating, string? Comment);
+    public sealed record ReviewDto(
+        Guid Id,
+        string User,
+        int Rating,
+        string? Comment);
 }

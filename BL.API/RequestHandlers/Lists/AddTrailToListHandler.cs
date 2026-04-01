@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace BL.API.RequestHandlers.Lists;
 
 [Handler]
-public sealed class AddTrailToListHandler(Db db, IUserSessionService userSession)
+public sealed class AddTrailToListHandler(
+    Db db,
+    IUserSessionService userSession)
 {
     public async Task<bool> HandleAsync(Guid listId, Guid trailId)
     {

@@ -80,5 +80,9 @@ public sealed class SearchTrailsHandler(Db db)
         string? Region,
         string Country);
 
-    public sealed record Response(List<TrailSummary> Items, int TotalCount, int Page, int PageSize);
+    public sealed record Response(
+        List<TrailSummary> Items,
+        int TotalCount,
+        int Page,
+        int PageSize);
 }

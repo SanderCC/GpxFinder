@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Http;
 namespace BL.API.RequestHandlers.Trails;
 
 [Handler]
-public sealed class UploadTrailPhotoHandler(Db db, IUserSessionService userSession)
+public sealed class UploadTrailPhotoHandler(
+    Db db,
+    IUserSessionService userSession)
 {
     public async Task<Response> HandleAsync(Guid trailId, Request model)
     {
@@ -30,6 +32,9 @@ public sealed class UploadTrailPhotoHandler(Db db, IUserSessionService userSessi
         return new Response(photo.Id);
     }
 
-    public sealed record Request(IFormFile Photo, double? Latitude, double? Longitude);
+    public sealed record Request(
+        IFormFile Photo,
+        double? Latitude,
+        double? Longitude);
     public sealed record Response(Guid PhotoId);
 }

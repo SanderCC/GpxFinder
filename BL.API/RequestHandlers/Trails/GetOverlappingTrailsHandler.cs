@@ -28,6 +28,10 @@ public sealed class GetOverlappingTrailsHandler(Db db)
     }
 
     public sealed record TrailSummary(
-        Guid Id, string Name, TrailType TrailType, DifficultyLevel Difficulty,
-        decimal DistanceKm, decimal ElevationGainMeters);
+        Guid Id,
+        string Name,
+        TrailType TrailType,
+        DifficultyLevel Difficulty,
+        decimal DistanceKm,
+        decimal ElevationGainMeters);
 }

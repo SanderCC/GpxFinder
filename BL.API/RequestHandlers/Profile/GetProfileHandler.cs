@@ -14,5 +14,9 @@ public sealed class GetProfileHandler(IUserSessionService userSession)
         return new Response(user.FirstName, user.LastName, user.Email!, user.HomeTown);
     }
 
-    public sealed record Response(string FirstName, string LastName, string Email, string? Hometown);
+    public sealed record Response(
+        string FirstName,
+        string LastName,
+        string Email,
+        string? Hometown);
 }

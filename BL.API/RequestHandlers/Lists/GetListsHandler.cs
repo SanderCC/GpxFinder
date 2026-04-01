@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 namespace BL.API.RequestHandlers.Lists;
 
 [Handler]
-public sealed class GetListsHandler(Db db, IUserSessionService userSession)
+public sealed class GetListsHandler(
+    Db db,
+    IUserSessionService userSession)
 {
     public async Task<List<TrailListDto>> HandleAsync()
     {
@@ -19,5 +21,9 @@ public sealed class GetListsHandler(Db db, IUserSessionService userSession)
             .ToListAsync();
     }
 
-    public sealed record TrailListDto(Guid Id, string Name, DateTimeOffset CreatedAt, int TrailCount);
+    public sealed record TrailListDto(
+        Guid Id,
+        string Name,
+        DateTimeOffset CreatedAt,
+        int TrailCount);
 }

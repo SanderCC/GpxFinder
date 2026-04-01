@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace BL.API.RequestHandlers.Favorites;
 
 [Handler]
-public sealed class AddFavoriteHandler(Db db, IUserSessionService userSession)
+public sealed class AddFavoriteHandler(
+    Db db,
+    IUserSessionService userSession)
 {
     public async Task<bool> HandleAsync(Guid trailId)
     {

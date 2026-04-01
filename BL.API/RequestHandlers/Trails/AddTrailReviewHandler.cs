@@ -6,7 +6,9 @@ using Domain.App;
 namespace BL.API.RequestHandlers.Trails;
 
 [Handler]
-public sealed class AddTrailReviewHandler(Db db, IUserSessionService userSession)
+public sealed class AddTrailReviewHandler(
+    Db db,
+    IUserSessionService userSession)
 {
     public async Task<Response> HandleAsync(Guid trailId, Request model)
     {
@@ -30,6 +32,9 @@ public sealed class AddTrailReviewHandler(Db db, IUserSessionService userSession
         return new Response(review.Id);
     }
 
-    public sealed record Request(int Rating, string? Comment, bool IsReport = false);
+    public sealed record Request(
+        int Rating,
+        string? Comment,
+        bool IsReport = false);
     public sealed record Response(Guid ReviewId);
 }

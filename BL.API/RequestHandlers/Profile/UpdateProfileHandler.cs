@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Identity;
 namespace BL.API.RequestHandlers.Profile;
 
 [Handler]
-public sealed class UpdateProfileHandler(IUserSessionService userSession, UserManager<AppUser> userManager)
+public sealed class UpdateProfileHandler(
+    IUserSessionService userSession,
+    UserManager<AppUser> userManager)
 {
     public async Task<Response> HandleAsync(Request model)
     {
@@ -22,6 +24,11 @@ public sealed class UpdateProfileHandler(IUserSessionService userSession, UserMa
         return new Response(result.Succeeded, result.Errors.Select(e => e.Description).ToArray());
     }
 
-    public sealed record Request(string FirstName, string LastName, string? Hometown);
-    public sealed record Response(bool Succeeded, string[] Errors);
+    public sealed record Request(
+        string FirstName,
+        string LastName,
+        string? Hometown);
+    public sealed record Response(
+        bool Succeeded,
+        string[] Errors);
 }

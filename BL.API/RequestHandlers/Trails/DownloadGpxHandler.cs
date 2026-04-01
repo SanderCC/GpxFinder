@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 namespace BL.API.RequestHandlers.Trails;
 
 [Handler]
-public sealed class DownloadGpxHandler(Db db, IGpxExporter gpxExporter)
+public sealed class DownloadGpxHandler(
+    Db db,
+    IGpxExporter gpxExporter)
 {
     public async Task<Response?> HandleAsync(Guid trailId)
     {
@@ -19,5 +21,7 @@ public sealed class DownloadGpxHandler(Db db, IGpxExporter gpxExporter)
         return new Response(gpxBytes, fileName);
     }
 
-    public sealed record Response(byte[] FileBytes, string FileName);
+    public sealed record Response(
+        byte[] FileBytes,
+        string FileName);
 }

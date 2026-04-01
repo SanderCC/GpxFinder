@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Identity;
 namespace BL.Identity;
 
 [Service]
-public class UserSessionService(IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
+public class UserSessionService(
+    IHttpContextAccessor httpContextAccessor,
+    UserManager<AppUser> userManager)
     : IUserSessionService
 {
     public Guid? GetUserId()

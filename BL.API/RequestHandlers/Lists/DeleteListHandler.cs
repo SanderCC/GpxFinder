@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 namespace BL.API.RequestHandlers.Lists;
 
 [Handler]
-public sealed class DeleteListHandler(Db db, IUserSessionService userSession)
+public sealed class DeleteListHandler(
+    Db db,
+    IUserSessionService userSession)
 {
     public async Task<bool> HandleAsync(Guid listId)
     {

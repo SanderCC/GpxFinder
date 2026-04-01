@@ -26,6 +26,13 @@ public sealed class RegisterHandler(UserManager<AppUser> userManager)
             result.Errors.Select(e => e.Description).ToArray());
     }
 
-    public sealed record Request(string FirstName, string LastName, string Email, string Password, string? Hometown);
-    public sealed record Response(bool Succeeded, string[] Errors);
+    public sealed record Request(
+        string FirstName,
+        string LastName,
+        string Email,
+        string Password,
+        string? Hometown);
+    public sealed record Response(
+        bool Succeeded,
+        string[] Errors);
 }

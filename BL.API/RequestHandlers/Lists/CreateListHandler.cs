@@ -6,7 +6,9 @@ using Domain.App;
 namespace BL.API.RequestHandlers.Lists;
 
 [Handler]
-public sealed class CreateListHandler(Db db, IUserSessionService userSession)
+public sealed class CreateListHandler(
+    Db db,
+    IUserSessionService userSession)
 {
     public async Task<Response> HandleAsync(Request model)
     {

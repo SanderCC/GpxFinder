@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Http;
 namespace BL.API.RequestHandlers.Gpx;
 
 [Handler]
-public sealed class ImportGpxRouteHandler(IGpxTrailService gpxTrailService, IUserSessionService userSessionService, Db db)
+public sealed class ImportGpxRouteHandler(
+    IGpxTrailService gpxTrailService,
+    IUserSessionService userSessionService,
+    Db db)
 {
     public async Task<Response> HandleAsync(Request model)
     {
