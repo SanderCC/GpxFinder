@@ -27,6 +27,9 @@ import HikingIcon from "@mui/icons-material/Hiking";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import TerrainIcon from "@mui/icons-material/Terrain";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { Icon } from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 const trailTypes = [
   { label: "Cycling", icon: <DirectionsBikeIcon sx={{ fontSize: 16 }} /> },
@@ -46,7 +49,8 @@ const mockTrails = [
     difficulty: "Beginner",
     distance: 42,
     elevation: 180,
-    image: null,
+    lat: 50.23,
+    lng: 5.59,
   },
   {
     id: 2,
@@ -55,7 +59,8 @@ const mockTrails = [
     difficulty: "Advanced",
     distance: 28,
     elevation: 650,
-    image: null,
+    lat: 50.35,
+    lng: 5.87,
   },
   {
     id: 3,
@@ -64,9 +69,21 @@ const mockTrails = [
     difficulty: "Experienced",
     distance: 125,
     elevation: 420,
-    image: null,
+    lat: 50.43,
+    lng: 6.19,
   },
 ];
+
+// Fix default marker icon for Leaflet + bundlers
+const defaultIcon = new Icon({
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
 export default function ExplorePage() {
   const [filterOpen, setFilterOpen] = useState(false);
@@ -216,25 +233,30 @@ export default function ExplorePage() {
           />
         </Box>
 
-        {/* Map placeholder + trail preview cards */}
+        {/* Map + trail preview cards */}
         <Box sx={{ flexGrow: 1, position: "relative" }}>
-          {/* Map placeholder */}
-          <Box
-            sx={{
-              height: "100%",
-              bgcolor: "rgba(124, 77, 255, 0.03)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              gap: 1,
-            }}
+          {/* Leaflet map */}
+          <MapContainer
+            center={[50.35, 5.87]}
+            zoom={9}
+            style={{ height: "100%", width: "100%" }}
           >
-            <TerrainIcon sx={{ fontSize: 64, color: "text.secondary", opacity: 0.3 }} />
-            <Typography color="text.secondary" variant="body2">
-              Leaflet map will render here
-            </Typography>
-          </Box>
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
+              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            />
+            {mockTrails.map((trail) => (
+              <Marker key={trail.id} position={[trail.lat, trail.lng]} icon={defaultIcon}>
+                <Popup>
+                  <strong>{trail.name}</strong>
+                  <br />
+                  {trail.type} &middot; {trail.difficulty}
+                  <br />
+                  {trail.distance} km &middot; {trail.elevation}m elev.
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
 
           {/* Trail preview cards (overlay) */}
           <Box
@@ -243,6 +265,7 @@ export default function ExplorePage() {
               bottom: 16,
               left: 16,
               right: 16,
+              zIndex: 1000,
               display: "flex",
               gap: 2,
               overflowX: "auto",

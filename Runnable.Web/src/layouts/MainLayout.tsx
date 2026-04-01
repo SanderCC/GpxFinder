@@ -59,7 +59,7 @@ export default function MainLayout() {
           <Box sx={{ flexGrow: 1 }} />
 
           {!isMobile && (
-            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+            <Box sx={{ display: "flex", gap: 1, alignItems: "center", flexShrink: 0 }}>
               {navItems.map((item) => (
                 <Button
                   key={item.path}
@@ -68,12 +68,13 @@ export default function MainLayout() {
                   sx={{
                     color: isActive(item.path) ? "primary.main" : "text.secondary",
                     "&:hover": { color: "text.primary" },
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {item.label}
                 </Button>
               ))}
-              <Box sx={{ width: 1, height: 24, bgcolor: "divider", mx: 1 }} />
+              <Box sx={{ width: "1px", height: 24, bgcolor: "divider", mx: 1, flexShrink: 0 }} />
               <Button
                 variant="text"
                 color="inherit"
