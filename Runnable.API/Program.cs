@@ -10,7 +10,10 @@ builder.Services
     .AddDbContext<Db, SqlServerContext>()
     .AddDecoratedServices()
     .AddOpenApi()
-    .AddSwaggerGen()
+    .AddSwaggerGen(options =>
+    {
+        options.CustomSchemaIds(type => type.FullName?.Replace('+', '.'));
+    })
     .AddControllers();
 
 var app = builder.Build();
