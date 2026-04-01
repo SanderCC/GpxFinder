@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\BL.Core\BL.Core.csproj" />
       <ProjectReference Include="..\BL.Gpx\BL.Gpx.csproj" />
+      <ProjectReference Include="..\BL.Identity\BL.Identity.csproj" />
       <ProjectReference Include="..\DAL.Core\DAL.Core.csproj" />
     </ItemGroup>
 
