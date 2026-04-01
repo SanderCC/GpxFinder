@@ -1,12 +1,11 @@
+using Domain.App.Abstract;
 using Domain.App.Enums;
 using Domain.Identity;
 
 namespace Domain.App;
 
-public class TrailPhoto
+public class TrailPhoto : Entity
 {
-    public Guid Id { get; set; }
-
     public Guid TrailId { get; set; }
     public Trail? Trail { get; set; }
 
@@ -19,6 +18,4 @@ public class TrailPhoto
     public AppUser? UploadedByUser { get; set; }
 
     public PhotoSource Source { get; set; }
-
-    public DateTime CreatedAt { get; set; }
 }

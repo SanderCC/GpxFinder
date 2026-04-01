@@ -10,5 +10,5 @@ public class UserFavorite
     public Guid TrailId { get; set; }
     public Trail? Trail { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 }

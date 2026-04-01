@@ -14,9 +14,9 @@ public sealed class GetTrailReviewsHandler(Db db)
             .OrderByDescending(r => r.CreatedAt)
             .Select(r => new ReviewDto(
                 r.Id, r.User!.FirstName + " " + r.User.LastName[..1] + ".",
-                r.Rating, r.Comment, r.CreatedAt))
+                r.Rating, r.Comment))
             .ToListAsync();
     }
 
-    public sealed record ReviewDto(Guid Id, string User, int Rating, string? Comment, DateTime CreatedAt);
+    public sealed record ReviewDto(Guid Id, string User, int Rating, string? Comment);
 }

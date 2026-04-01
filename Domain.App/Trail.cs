@@ -1,13 +1,12 @@
+using Domain.App.Abstract;
 using Domain.App.Enums;
 using Domain.Identity;
 using NetTopologySuite.Geometries;
 
 namespace Domain.App;
 
-public class Trail
+public class Trail : Entity
 {
-    public Guid Id { get; set; }
-
     public required string Name { get; set; }
     public string? Description { get; set; }
 
@@ -40,8 +39,7 @@ public class Trail
 
     public TrailStatus Status { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTimeOffset UpdatedAt { get; set; }
 
     public ICollection<TrailPhoto> Photos { get; set; } = [];
     public ICollection<TrailReview> Reviews { get; set; } = [];

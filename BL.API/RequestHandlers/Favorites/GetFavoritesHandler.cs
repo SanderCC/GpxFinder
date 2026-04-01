@@ -25,5 +25,5 @@ public sealed class GetFavoritesHandler(Db db, IUserSessionService userSession)
 
     public sealed record FavoriteTrailDto(
         Guid Id, string Name, TrailType TrailType, DifficultyLevel Difficulty,
-        decimal DistanceKm, decimal ElevationGainMeters, DateTime FavoritedAt);
+        decimal DistanceKm, decimal ElevationGainMeters, DateTimeOffset FavoritedAt);
 }

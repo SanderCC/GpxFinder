@@ -19,5 +19,5 @@ public sealed class GetListsHandler(Db db, IUserSessionService userSession)
             .ToListAsync();
     }
 
-    public sealed record TrailListDto(Guid Id, string Name, DateTime CreatedAt, int TrailCount);
+    public sealed record TrailListDto(Guid Id, string Name, DateTimeOffset CreatedAt, int TrailCount);
 }

@@ -47,7 +47,7 @@ public class GpxExporter : IGpxExporter
             author: null,
             copyright: null,
             links: ImmutableArray<GpxWebLink>.Empty,
-            creationTimeUtc: trail.CreatedAt,
+            creationTimeUtc: trail.CreatedAt.UtcDateTime,
             keywords: null,
             bounds: null,
             extensions: null);
