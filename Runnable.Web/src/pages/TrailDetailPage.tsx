@@ -33,8 +33,8 @@ import LinkIcon from "@mui/icons-material/Link";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+import FlagIcon from "@mui/icons-material/Flag";
+import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from "react-leaflet";
@@ -72,8 +72,7 @@ export default function TrailDetailPage() {
   const trail = mockTrails.find((t) => t.id === Number(id));
 
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isDisliked, setIsDisliked] = useState(false);
-  const [dislikeCount, setDislikeCount] = useState(0);
+  const [isReport, setIsReport] = useState(false);
   const [reviewRating, setReviewRating] = useState<number | null>(null);
   const [reviewComment, setReviewComment] = useState("");
   const [reviews, setReviews] = useState<TrailReview[]>(trail?.reviews ?? []);
@@ -107,13 +106,6 @@ export default function TrailDetailPage() {
 
   const photoMarkers = trail.photos.filter((p) => p.lat && p.lng);
 
-  const handleToggleDislike = () => {
-    setIsDisliked((prev) => {
-      setDislikeCount((c) => prev ? c - 1 : c + 1);
-      return !prev;
-    });
-  };
-
   const handleSubmitReview = () => {
     if (!reviewRating) return;
     const newReview: TrailReview = {
@@ -122,10 +114,12 @@ export default function TrailDetailPage() {
       rating: reviewRating,
       comment: reviewComment,
       date: "Just now",
+      isReport,
     };
     setReviews((prev) => [newReview, ...prev]);
     setReviewRating(null);
     setReviewComment("");
+    setIsReport(false);
   };
 
   return (
@@ -375,7 +369,7 @@ export default function TrailDetailPage() {
                   onChange={(e) => setReviewComment(e.target.value)}
                   sx={{ mb: 2 }}
                 />
-                <Stack direction="row" spacing={2}>
+                <Stack direction="row" spacing={2} alignItems="center">
                   <Button
                     variant="contained"
                     size="small"
@@ -387,11 +381,11 @@ export default function TrailDetailPage() {
                   <Button
                     variant="outlined"
                     size="small"
-                    color={isDisliked ? "error" : "inherit"}
-                    startIcon={isDisliked ? <ThumbDownIcon /> : <ThumbDownOffAltIcon />}
-                    onClick={handleToggleDislike}
+                    color={isReport ? "error" : "inherit"}
+                    startIcon={isReport ? <FlagIcon /> : <FlagOutlinedIcon />}
+                    onClick={() => setIsReport(!isReport)}
                   >
-                    {isDisliked ? "Disliked" : "Report issue"}{dislikeCount > 0 ? ` (${dislikeCount})` : ""}
+                    {isReport ? "Flagged as report" : "Report issue"}
                   </Button>
                 </Stack>
               </CardContent>

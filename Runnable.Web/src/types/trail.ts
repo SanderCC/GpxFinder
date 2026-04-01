@@ -32,6 +32,7 @@ export interface TrailReview {
   rating: number;
   comment: string;
   date: string;
+  isReport?: boolean;
 }
 
 export type TrailType = "Cycling" | "Hiking" | "Running" | "Mountain Biking";
