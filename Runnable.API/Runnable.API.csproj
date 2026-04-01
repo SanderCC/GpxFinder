@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BL.API\BL.API.csproj" />
       <ProjectReference Include="..\BL.Core\BL.Core.csproj" />
       <ProjectReference Include="..\DAL.Core\DAL.Core.csproj" />
       <ProjectReference Include="..\DAL.SqlServer\DAL.SqlServer.csproj" />

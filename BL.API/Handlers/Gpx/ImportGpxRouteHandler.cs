@@ -4,7 +4,7 @@ using BL.Identity;
 using DAL.Core;
 using Microsoft.AspNetCore.Http;
 
-namespace BL.API.Gpx.Handlers;
+namespace BL.API.Handlers.Gpx;
 
 [Handler]
 public sealed class ImportGpxRouteHandler(IGpxTrailService gpxTrailService, IUserSessionService userSessionService, Db db)
