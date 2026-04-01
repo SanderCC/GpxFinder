@@ -3,6 +3,8 @@ using System.Runtime.CompilerServices;
 using BL.Core.Helpers;
 using DAL.Core;
 using DAL.SqlServer;
+using Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddDbContext<Db, SqlServerContext>()
     .AddHttpClient()
+    .AddIdentityApiEndpoints<AppUser>()
+    .AddRoles<AppRole>()
+    .AddEntityFrameworkStores<Db>()
+    .AddDefaultTokenProviders();
+
+builder.Services
     .AddDecoratedServices(
         Assembly.GetExecutingAssembly(),
+        typeof(BL.API.RequestHandlers.Identity.LoginHandler).Assembly,
         typeof(BL.Crawler.Core.ICrawler).Assembly,
         typeof(BL.Crawler.EuroVeloBelgiumCrawler.EuroVeloBelgiumCrawler).Assembly)
     .AddOpenApi()
@@ -34,6 +43,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
+app.MapGroup("/auth").MapIdentityApi<AppUser>();
 
 app.Run();
