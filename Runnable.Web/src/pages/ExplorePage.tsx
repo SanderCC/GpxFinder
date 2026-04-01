@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -30,6 +31,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { mockTrails } from "../data/mockTrails";
 
 const trailTypes = [
   { label: "Cycling", icon: <DirectionsBikeIcon sx={{ fontSize: 16 }} /> },
@@ -39,40 +41,6 @@ const trailTypes = [
 ];
 
 const difficulties = ["Beginner", "Experienced", "Advanced"];
-
-// Mock trail data for the preview cards
-const mockTrails = [
-  {
-    id: 1,
-    name: "Ravel de l'Ourthe",
-    type: "Cycling",
-    difficulty: "Beginner",
-    distance: 42,
-    elevation: 180,
-    lat: 50.23,
-    lng: 5.59,
-  },
-  {
-    id: 2,
-    name: "GR 5 Ardennes",
-    type: "Hiking",
-    difficulty: "Advanced",
-    distance: 28,
-    elevation: 650,
-    lat: 50.35,
-    lng: 5.87,
-  },
-  {
-    id: 3,
-    name: "Vennbahn Trail",
-    type: "Cycling",
-    difficulty: "Experienced",
-    distance: 125,
-    elevation: 420,
-    lat: 50.43,
-    lng: 6.19,
-  },
-];
 
 // Fix default marker icon for Leaflet + bundlers
 const defaultIcon = new Icon({
@@ -86,6 +54,7 @@ const defaultIcon = new Icon({
 });
 
 export default function ExplorePage() {
+  const navigate = useNavigate();
   const [filterOpen, setFilterOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -98,6 +67,21 @@ export default function ExplorePage() {
       prev.includes(label) ? prev.filter((t) => t !== label) : [...prev, label]
     );
   };
+
+  const filteredTrails = mockTrails.filter((trail) => {
+    if (search && !trail.name.toLowerCase().includes(search.toLowerCase()) &&
+        !trail.region.toLowerCase().includes(search.toLowerCase()) &&
+        !trail.country.toLowerCase().includes(search.toLowerCase())) {
+      return false;
+    }
+    if (selectedTypes.length > 0 && !selectedTypes.includes(trail.type)) {
+      return false;
+    }
+    if (trail.distance < distanceRange[0] || trail.distance > distanceRange[1]) {
+      return false;
+    }
+    return true;
+  });
 
   const filterContent = (
     <Box sx={{ p: 3, width: isMobile ? 300 : "100%" }}>
@@ -237,15 +221,15 @@ export default function ExplorePage() {
         <Box sx={{ flexGrow: 1, position: "relative" }}>
           {/* Leaflet map */}
           <MapContainer
-            center={[50.35, 5.87]}
-            zoom={9}
+            center={[50.5, 5.5]}
+            zoom={8}
             style={{ height: "100%", width: "100%" }}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
             />
-            {mockTrails.map((trail) => (
+            {filteredTrails.map((trail) => (
               <Marker key={trail.id} position={[trail.lat, trail.lng]} icon={defaultIcon}>
                 <Popup>
                   <strong>{trail.name}</strong>
@@ -253,6 +237,17 @@ export default function ExplorePage() {
                   {trail.type} &middot; {trail.difficulty}
                   <br />
                   {trail.distance} km &middot; {trail.elevation}m elev.
+                  <br />
+                  <a
+                    href={`/trail/${trail.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/trail/${trail.id}`);
+                    }}
+                    style={{ color: "#7c4dff" }}
+                  >
+                    View details →
+                  </a>
                 </Popup>
               </Marker>
             ))}
@@ -274,9 +269,10 @@ export default function ExplorePage() {
               "&::-webkit-scrollbar-thumb": { bgcolor: "rgba(255,255,255,0.1)", borderRadius: 2 },
             }}
           >
-            {mockTrails.map((trail) => (
+            {filteredTrails.map((trail) => (
               <Card
                 key={trail.id}
+                onClick={() => navigate(`/trail/${trail.id}`)}
                 sx={{
                   minWidth: 240,
                   maxWidth: 280,
