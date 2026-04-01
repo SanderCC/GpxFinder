@@ -5,9 +5,9 @@ namespace Domain.App;
 
 public class TrailPhoto
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public int TrailId { get; set; }
+    public Guid TrailId { get; set; }
     public Trail? Trail { get; set; }
 
     public required string PhotoUrl { get; set; }

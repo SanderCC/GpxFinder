@@ -4,9 +4,9 @@ namespace Domain.App;
 
 public class TrailReview
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public int TrailId { get; set; }
+    public Guid TrailId { get; set; }
     public Trail? Trail { get; set; }
 
     public Guid UserId { get; set; }

@@ -1,11 +1,12 @@
 using Domain.App.Enums;
 using Domain.Identity;
+using NetTopologySuite.Geometries;
 
 namespace Domain.App;
 
 public class Trail
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public required string Name { get; set; }
     public string? Description { get; set; }
@@ -21,6 +22,7 @@ public class Trail
     public bool IsDogFriendly { get; set; }
 
     public required string GpxFileUrl { get; set; }
+    public LineString? Route { get; set; }
 
     public SourceType SourceType { get; set; }
     public string? SourceUrl { get; set; }
