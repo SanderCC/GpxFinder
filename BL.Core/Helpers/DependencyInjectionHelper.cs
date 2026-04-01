@@ -26,15 +26,16 @@ public static class DependencyInjectionHelper
 
         foreach (var registration in typesToRegister)
         {
-            var interfaceType = registration.Type.GetInterfaces().FirstOrDefault();
-            if (interfaceType != null)
+            var interfaces = registration.Type.GetInterfaces();
+            if (interfaces.Length != 0)
             {
-                services.AddScoped(interfaceType, registration.Type);
+                foreach (var @interface in interfaces)
+                {
+                    services.AddScoped(@interface, registration.Type);
+                }
             }
-            else
-            {
-                services.AddScoped(registration.Type);
-            }
+            
+            services.AddScoped(registration.Type);
         }
 
         return services;

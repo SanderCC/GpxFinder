@@ -1,3 +1,5 @@
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using BL.Core.Helpers;
 using DAL.Core;
 using DAL.SqlServer;
@@ -8,7 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services
     .AddDbContext<Db, SqlServerContext>()
-    .AddDecoratedServices()
+    .AddHttpClient()
+    .AddDecoratedServices(
+        Assembly.GetExecutingAssembly(),
+        typeof(BL.Crawler.Core.ICrawler).Assembly,
+        typeof(BL.Crawler.EuroVeloBelgiumCrawler.EuroVeloBelgiumCrawler).Assembly)
     .AddOpenApi()
     .AddSwaggerGen(options =>
     {

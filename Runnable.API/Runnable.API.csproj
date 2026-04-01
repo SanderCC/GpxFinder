@@ -16,6 +16,8 @@
       <ProjectReference Include="..\BL.Core\BL.Core.csproj" />
       <ProjectReference Include="..\DAL.Core\DAL.Core.csproj" />
       <ProjectReference Include="..\DAL.SqlServer\DAL.SqlServer.csproj" />
+      <ProjectReference Include="..\BL.Crawler.Core\BL.Crawler.Core.csproj" />
+      <ProjectReference Include="..\BL.Crawler.EuroVeloBelgiumCrawler\BL.Crawler.EuroVeloBelgiumCrawler.csproj" />
     </ItemGroup>
 
 </Project>

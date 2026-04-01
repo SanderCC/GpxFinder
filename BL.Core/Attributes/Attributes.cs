@@ -13,4 +13,4 @@ public class HandlerAttribute : ScopedAttribute { }
 public class HelperAttribute : ScopedAttribute { }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class CredentialsAttribute : ScopedAttribute { }
+public class CrawlerAttribute : ScopedAttribute { }
