@@ -1,4 +1,4 @@
-using BL.API.Handlers.Gpx;
+using BL.API.RequestHandlers.Gpx;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

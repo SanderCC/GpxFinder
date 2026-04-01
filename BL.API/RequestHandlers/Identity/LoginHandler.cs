@@ -1,6 +1,6 @@
 using BL.Core.Attributes;
 
-namespace BL.API.Handlers.Identity;
+namespace BL.API.RequestHandlers.Identity;
 
 [Handler]
 public sealed class LoginHandler

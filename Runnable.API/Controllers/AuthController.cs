@@ -1,4 +1,4 @@
-using BL.API.Handlers.Identity;
+using BL.API.RequestHandlers.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
