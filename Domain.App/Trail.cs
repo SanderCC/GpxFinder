@@ -38,8 +38,6 @@ public class Trail
     public string? Region { get; set; }
     public string? City { get; set; }
 
-    public int DislikeCount { get; set; }
-    public bool IsOffline { get; set; }
     public TrailStatus Status { get; set; }
 
     public DateTime CreatedAt { get; set; }
@@ -47,6 +45,5 @@ public class Trail
 
     public ICollection<TrailPhoto> Photos { get; set; } = [];
     public ICollection<TrailReview> Reviews { get; set; } = [];
-    public ICollection<TrailDislike> Dislikes { get; set; } = [];
     public ICollection<UserFavorite> Favorites { get; set; } = [];
 }

@@ -14,6 +14,7 @@ public class TrailReview
 
     public int Rating { get; set; }
     public string? Comment { get; set; }
+    public bool IsReport { get; set; }
 
     public DateTime CreatedAt { get; set; }
 }
