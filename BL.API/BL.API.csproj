@@ -11,6 +11,7 @@
       <ProjectReference Include="..\BL.Gpx\BL.Gpx.csproj" />
       <ProjectReference Include="..\BL.Identity\BL.Identity.csproj" />
       <ProjectReference Include="..\DAL.Core\DAL.Core.csproj" />
+      <ProjectReference Include="..\Domain.App\Domain.App.csproj" />
     </ItemGroup>
 
 </Project>
